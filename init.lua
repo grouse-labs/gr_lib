@@ -1,3 +1,5 @@
+if _VERSION:gsub('%D', '') < ('5.4'):gsub('%D', '') then error('Lua version 5.4 or higher is required', 0) end
+
 local RES_NAME <const> = GetCurrentResourceName()
 local GLIB <const> = 'gr_lib'
 
@@ -27,7 +29,7 @@ local function import(glib, module)
   file = shared and file and string.format('%s\n%s', shared, file) or shared or file
 
   if not file then return end
-  local result, err = load(file, '@@'..GLIB..'/'..dir, 't', _ENV)
+  local result, err = load(file, '@@'..GLIB..'/'..dir..CONTEXT, 't', _ENV)
   if not result or err then return error('error occured loading module \''..module..'\''..(err and '\n\t'..err or ''), 3) end
   glib[module] = result()
   if debug_mode then print('^3[glib]^7 - ^2loaded `glib` module^7 ^5\''..module..'\'^7') end
@@ -48,6 +50,17 @@ local function call(glib, index, ...)
   return module
 end
 
+if CONTEXT == 'server' then
+
+  ---@param src integer|string? The source to check.
+  ---@return boolean? valid
+  function IsSrcAPlayer(src)
+    src = src or source
+    return tonumber(src) and tonumber(src) > 0 and DoesPlayerExist(src)
+  end
+
+end
+
 --------------------- OBJECT ---------------------
 
 ---@version 5.4
@@ -58,6 +71,7 @@ end
 ---@field _DEBUG boolean
 ---@field _RESOURCE string
 ---@field _CONTEXT string
+---@field callback CCallback
 ---@field print fun(...): msg: string Prints a message to the console. <br> If `glib:debug` is set to `false`, it will not print the message. <br> Returns the message that was printed.
 ---@field require fun(module_name: string): module: unknown `mod_name` needs to be a dot seperated path from resource to module. <br> Credits to [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`require`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L149).
 local glib = setmetatable({
