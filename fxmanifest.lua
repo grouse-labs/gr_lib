@@ -9,6 +9,7 @@ url ''
 files {
   'init.lua',
   'src/**/shared.lua',
+  'src/**/client.lua',
   -- 'src/**/**/shared.lua',
   -- 'src/**/**/client.lua'
 }
