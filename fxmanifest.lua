@@ -8,7 +8,7 @@ url ''
 
 files {
   'init.lua',
-  -- 'src/**/shared.lua',
+  'src/**/shared.lua',
   -- 'src/**/**/shared.lua',
   -- 'src/**/**/client.lua'
 }
