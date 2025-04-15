@@ -1,0 +1,100 @@
+local RES_NAME <const> = GetCurrentResourceName()
+local GLIB <const> = 'gr_lib'
+
+local get_res_meta = GetResourceMetadata
+local VERSION <const> = get_res_meta(GLIB, 'version', 0)
+local URL <const> = get_res_meta(GLIB, 'url', 0)
+local DES <const> = get_res_meta(GLIB, 'description', 0)
+
+local get_convar = GetConvar
+local debug_mode = get_convar('glib:debug', 'false') == 'true'
+
+local load, load_resource_file = load, LoadResourceFile
+local export = exports[GLIB]
+
+local CONTEXT <const> = IsDuplicityVersion() == 1 and 'server' or 'client'
+
+--------------------- FUNCTIONS ---------------------
+
+---@param glib CGlib
+---@param module string
+---@return function?
+local function import(glib, module)
+  local dir = 'src/'..module..'/'
+  local file = load_resource_file(GLIB, dir..CONTEXT..'.lua')
+  local shared = load_resource_file(GLIB, dir..'shared.lua')
+
+  file = shared and file and string.format('%s\n%s', shared, file) or shared or file
+
+  if not file then return end
+  local result, err = load(file, '@@'..GLIB..'/'..dir, 't', _ENV)
+  if not result or err then return error('error occured loading module \''..module..'\''..(err and '\n\t'..err or ''), 3) end
+  glib[module] = result()
+  if debug_mode then print('^3[glib]^7 - ^2loaded `glib` module^7 ^5\''..module..'\'^7') end
+  return glib[module]
+end
+
+---@param glib CGlib
+---@param index string
+---@param ... any
+---@return function
+local function call(glib, index, ...)
+  local module = rawget(glib, index) or import(glib, index)
+  if not module then
+    local method = function(...) return export[index](nil, ...) end
+    if not ... then bridge[index] = method end
+    module = method
+  end
+  return module
+end
+
+--------------------- OBJECT ---------------------
+
+---@version 5.4
+---@class CGlib
+---@field _VERSION string
+---@field _URL string
+---@field _DESCRIPTION string
+---@field _DEBUG boolean
+---@field _RESOURCE string
+---@field _CONTEXT string
+---@field print fun(...): msg: string Prints a message to the console. <br> If `glib:debug` is set to `false`, it will not print the message. <br> Returns the message that was printed.
+---@field require fun(module_name: string): module: unknown `mod_name` needs to be a dot seperated path from resource to module. <br> Credits to [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`require`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L149).
+local glib = setmetatable({
+  _VERSION = VERSION,
+  _URL = URL,
+  _DESCRIPTION = DES,
+  _DEBUG = debug_mode,
+  _RESOURCE = RES_NAME,
+  _CONTEXT = CONTEXT,
+  print = function(...)
+    local msg = '^3['..RES_NAME..']^7 - '..(...)
+    if debug_mode then
+      print(msg)
+    end
+    return msg
+  end
+}, {
+  __name = GLIB,
+  __version = VERSION,
+  __tostring = function(t)
+    local address = string.format('%s: %p', GLIB, t)
+    if debug_mode then
+      local msg = string.format('^3[%s]^7 - ^2library^7 ^5\'%s\'^7 v^5%s^7\n%s', RES_NAME, GLIB, VERSION, address)
+      for k, v in pairs(t) do
+        if type(v) == 'table' then
+          msg = msg..string.format('\n^3[%s]^7 - ^2`glib` module^7 ^5\'%s\'^7 ^2is loaded^7\n%s: %p', RES_NAME, k, k, v)
+        end
+      end
+    return msg
+    end
+    return address
+  end,
+  __index = call,
+  __call = call
+})
+
+_ENV.glib = glib
+_ENV.require = glib.require
+
+return glib
