@@ -44,7 +44,7 @@ local function call(glib, index, ...)
   local module = rawget(glib, index) or import(glib, index)
   if not module then
     local method = function(...) return export[index](nil, ...) end
-    if not ... then bridge[index] = method end
+    if not ... then glib[index] = method end
     module = method
   end
   return module
@@ -72,6 +72,7 @@ end
 ---@field _RESOURCE string
 ---@field _CONTEXT string
 ---@field callback CCallback
+---@field enum fun(name: string|{[string|number]: string|number|(string|number)[]}, tbl: {[string|number]: string|number|(string|number)[]}?): CEnum|CEnum
 ---@field print fun(...): msg: string Prints a message to the console. <br> If `glib:debug` is set to `false`, it will not print the message. <br> Returns the message that was printed.
 ---@field require fun(module_name: string): module: unknown `mod_name` needs to be a dot seperated path from resource to module. <br> Credits to [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`require`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L149).
 local glib = setmetatable({
@@ -109,6 +110,7 @@ local glib = setmetatable({
 })
 
 _ENV.glib = glib
+_ENV.enum = glib.enum
 _ENV.require = glib.require
 
 return glib
