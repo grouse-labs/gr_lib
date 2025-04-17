@@ -9,14 +9,7 @@ local RESOURCE = glib._RESOURCE
 local get_resource_state = GetResourceState
 local _require = require
 
-local resource_states <const> = {
-  ---@diagnostic disable-next-line: duplicate-doc-alias
-  ---@enum (key) valid_states
-  valid = {['started'] = true, ['starting'] = true},
-  ---@diagnostic disable-next-line: duplicate-doc-alias
-  ---@enum (key) invalid_states
-  invalid = {['missing'] = true, ['unknown'] = true, ['stopped'] = true, ['stopping'] = true}
-}
+local resource_states = enum('resource_states')
 
 --------------------- OBJECT ---------------------
 
@@ -31,7 +24,7 @@ local package = {
 --------------------- FUNCTIONS ---------------------
 
 ---@param resource_name string
----@return boolean valid
+---@return boolean? valid
 local function is_resource_valid(resource_name)
   local state = get_resource_state(resource_name)
   return resource_states.valid[state] and not resource_states.invalid[state]
