@@ -10,6 +10,7 @@ files {
   'init.lua',
   'src/**/shared.lua',
   'src/**/client.lua',
+  'src/enum/enums/*.lua',
   -- 'src/**/**/shared.lua',
   -- 'src/**/**/client.lua'
 }
