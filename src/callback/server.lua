@@ -58,7 +58,7 @@ function callback.register(name, cb)
   if not cb or type(cb) ~= 'function' then error('bad argument #2 to \'register\' (function expected, got '..type(cb)..')', 2) end
 
   RegisterNetEvent(EVENT:format(name), function(resource, key, ...)
-    TriggerClientEvent(EVENT:format(resource), key, pass_callback_result(pcall(cb, ...)))
+    TriggerClientEvent(EVENT:format(resource), source, key, pass_callback_result(pcall(cb, source, ...)))
   end)
 end
 

@@ -88,7 +88,7 @@ end
 function callback.trigger(name, delay, cb, ...)
   if is_callback_delayed(name, delay) then return end
   if not name or type(name) ~= 'string' then error('bad argument #1 to \'trigger\' (string expected, got '..type(name)..')', 2) end
-  if cb == nil or type(cb) ~= 'function' then error('bad argument #3 to \'trigger\' (function expected, got '..type(cb)..')', 2) end
+  if cb ~= false and type(cb) ~= 'function' then error('bad argument #3 to \'trigger\' (function expected, got '..type(cb)..')', 2) end
 
   local key do
     repeat
