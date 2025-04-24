@@ -1,0 +1,11 @@
+---@class enum_options
+---@field [string|vector|number] string|vector|number|enum_options|[]
+
+---@class enum
+---@field new fun(name: string|table, tbl: enum_options?): enum
+---@field set fun(self: enum, key: string|vector|number, value: string|vector|number): self: enum
+---@field lookup fun(self: enum, var: string|vector|number): pair: string|vector|number|enum?
+---@field search fun(self: enum, var: string|vector|number): parent_key: string|vector|number?, result: enum|string|vector|number?
+---@field addalias fun(self: enum, key: string|vector|number, alias: string|vector|number): enum
+---@field addkey fun(self: enum, parent_key: string|vector|number?, key: string|vector|number, value: string|vector|number): enum
+---@field [string|vector] enum?
