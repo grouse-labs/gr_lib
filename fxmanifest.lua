@@ -6,6 +6,8 @@ description ''
 version '0'
 url ''
 
+server_script 'server/main.lua'
+
 files {
   'init.lua',
   'src/**/shared.lua',
