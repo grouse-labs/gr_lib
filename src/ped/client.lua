@@ -116,9 +116,9 @@ end
 function ped:setproofs(proofs)
   if not self:doesexist() then return end
   local entity = self.entity
-  SetPedDiesWhenInjured(entity, not proofs.injured)
-  SetEntityProofs(entity, proofs.bullet, proofs.fire, proofs.explosion, proofs.collision, proofs.melee, proofs.steam, true, proofs.water)
-  SetEntityInvincible(entity, proofs.invincible)
+  SetPedDiesWhenInjured(entity, not proofs.injured or true)
+  SetEntityProofs(entity, proofs.bullet or false, proofs.fire or false, proofs.explosion or false, proofs.collision or false, proofs.melee or false, proofs.steam or false, true, proofs.water or false)
+  SetEntityInvincible(entity, proofs.invincible  or false)
   self.options.proofs = proofs
   return self
 end

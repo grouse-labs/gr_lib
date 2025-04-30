@@ -15,14 +15,14 @@ local function listen_to_ped_scope(obj)
     while DoesEntityExist(entity) do
       Wait(sleep)
       local owner = NetworkGetEntityOwner(entity)
-      if owner ~= -1 and (not obj.owner or owner ~= obj.owner) then
+      if owner ~= -1 and owner ~= obj.owner then
         TriggerClientEvent(string.format(EVENT, RESOURCE, 'client', 'ped_initialise'), owner, netID, obj.options)
         obj.owner = owner
         sleep = 1000
         if obj.options.onEnteredScope then
           obj.options.onEnteredScope(entity, owner)
         end
-      elseif owner == -1 and obj.owner and obj.owner ~= -1 then
+      elseif owner == -1 and obj.owner ~= -1 and obj.owner ~= 0 then
         TriggerClientEvent(string.format(EVENT, RESOURCE, 'client', 'ped_destroy'), obj.owner, netID)
         obj.owner = -1
         sleep = 2500
@@ -115,6 +115,7 @@ function ped.new(model, coords, options)
     onExitedScope = function(entity, owner) print('exited: '..owner) end,
   }
   local entity = CreatePed(4, model, coords.x, coords.y, coords.z, coords.w or 0.0, true, true)
+  repeat Wait(0) until DoesEntityExist(entity)
   local netID = NetworkGetNetworkIdFromEntity(entity)
   obj.netID = netID
   obj.entity = entity
@@ -133,7 +134,7 @@ function ped.new(model, coords, options)
     ped.setrelationshipgroup(obj, data.relationship_group)
   end
   local weapons = options.weapons
-  ped.setweapon(obj, weapons.model, weapons.ammo, weapons.hidden, weapons.brandish, weapons.components)
+  ped.setweapon(obj, weapons?.model, weapons?.ammo, weapons?.hidden, weapons?.brandish, weapons?.components)
   ped.setcomponents(obj, options.components)
   ped.setprops(obj, options.props)
   ped.setranges(obj, options.ranges)
@@ -266,10 +267,10 @@ end
 
 function ped:setflags(flags)
   if not self.exists then return end
-  if flags.config then
+  if flags?.config then
     set_flags(self.entity, flags.config, false)
   end
-  if flags.reset then
+  if flags?.reset then
     set_flags(self.entity, flags.reset, true)
   end
   self.options.flags = flags or self.options.flags
