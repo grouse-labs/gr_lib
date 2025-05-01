@@ -1,0 +1,36 @@
+---@class PedOptions
+---@field data {orphan_mode: integer, bucket: integer, max_health: integer, armour: integer, relationship_group: string}
+---@field weapons {model: string, ammo: integer, hidden: boolean, brandish: boolean, components: table}?
+---@field components {default: boolean?, random: boolean?}|{component_id: integer, drawable_id: integer, texture_id: integer, palette_id: integer}[]?
+---@field props {random: boolean?}|{component_id: integer, drawable_id: integer, texture_id: integer, attach: boolean}[]?
+---@field ranges {lod: integer, id: number, seeing: number, peripheral: number, hearing: number, shout: number}?
+---@field combat_ai {ability: integer, accuracy: integer, alertness: integer, movement: integer, range: integer, target_response: integer}?
+---@field flags {combat: integer[]?, config: integer[]?, reset: integer[]?}?
+---@field proofs {injured: boolean?, bullet: boolean?, fire: boolean?, explosion: boolean?, collision: boolean?, melee: boolean?, steam: boolean?, water: boolean?, invincible: boolean?}?
+---@field onEnteredScope fun(entity: integer, owner: string)?
+---@field onExitedScope fun(entity: integer, owner: string)?
+
+---@class ped
+---@field model string
+---@field coords vector4
+---@field options PedOptions
+---@field entity integer
+---@field netID integer
+---@field owner integer
+---@field exists boolean
+---@field new fun(model: string, coords: vector4, options: PedOptions): ped
+---@field doesexist fun(self: ped): boolean
+---@field destroy fun(self: ped)
+---@field setorphanmode fun(self: ped, orphan_mode: integer): ped
+---@field setbucket fun(self: ped, bucket: integer): ped
+---@field setmaxhealth fun(self: ped, max_health: integer): ped
+---@field setarmour fun(self: ped, armour: integer): ped
+---@field setrelationshipgroup fun(self: ped, relationship_group: string): ped
+---@field setweapon fun(self: ped, model: string, ammo: integer, hidden: boolean, brandish: boolean, components: table): ped
+---@field setcomponents fun(self:ped, components: {default: boolean?, random: boolean?}|{component_id: integer, drawable_id: integer, texture_id: integer, palette_id: integer}[]): ped
+---@field setprops fun(self:ped, props: {random: boolean?}|{component_id: integer, drawable_id: integer, texture_id: integer, attach: boolean}[]): ped
+---@field setranges fun(self:ped, ranges: {lod: integer, id: number, seeing: number, peripheral: number, hearing: number, shout: number}): ped
+---@field setcombatai fun(self:ped, combat_ai: {ability: integer, accuracy: integer, alertness: integer, movement: integer, range: integer, target_response: integer}): ped
+---@field setflags fun(self:ped, flags: {combat: integer[]?, config: integer[]?, reset: integer[]?}): ped
+---@field setproofs fun(self:ped, proofs: {injured: boolean?, bullet: boolean?, fire: boolean?, explosion: boolean?, collision: boolean?, melee: boolean?, steam: boolean?, water: boolean?, invincible: boolean?}): ped
+---@field setstates fun(self:ped, states: table<string, any>): ped
