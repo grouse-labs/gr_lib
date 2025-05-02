@@ -1,0 +1,7 @@
+---@class stream
+---@field animdict fun(dictionary: string): boolean
+---@field model fun(model: string|number): boolean
+---@field ptfx fun(asset: string): boolean
+---@field textdict fun(dictionary: string): boolean
+---@field headshot fun(ped: integer): headshot_handle: integer|boolean
+---@field scaleform fun(scaleform: string): scaleform_handle: integer|boolean
