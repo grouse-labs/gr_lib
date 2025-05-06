@@ -4,4 +4,5 @@
 ---@field ptfx fun(asset: string): boolean
 ---@field textdict fun(dictionary: string): boolean
 ---@field headshot fun(ped: integer): headshot_handle: integer|boolean
----@field scaleform fun(scaleform: string): scaleform_handle: integer|boolean
+---@field scaleformhud fun(component: integer): scaleform_handle: boolean
+---@field audio fun(bank: string, networked: boolean?): boolean
