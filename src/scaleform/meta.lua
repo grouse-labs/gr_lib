@@ -1,0 +1,34 @@
+---@class scaleform_options
+---@field name string The name of the scaleform.
+---@field screen {full: boolean?, frontend: boolean?, header: boolean?, hud: integer?, x: number?, y: number?}
+---@field scale {width: number?, height: number?}?
+---@field colour {r: integer?, g: integer?, b: integer?, a: integer?}?
+---@field render {name: string, model: string|integer, large: boolean?, super_large: boolean?}?
+
+---@class scaleform
+---@field handle integer The handle of the scaleform.
+---@field is_drawing boolean Whether the scaleform is currently being drawn.
+---@field fullscreen boolean Whether the scaleform is fullscreen.
+---@field frontend boolean Whether the scaleform is a frontend scaleform.
+---@field header boolean Whether the scaleform is a frontend header scaleform.
+---@field hud boolean|integer Whether the scaleform is a HUD scaleform.
+---@field x number The x position of the scaleform.
+---@field y number The y position of the scaleform.
+---@field width number The width of the scaleform.
+---@field height number The height of the scaleform.
+---@field r integer The red colour value of the scaleform.
+---@field g integer The green colour value of the scaleform.
+---@field b integer The blue colour value of the scaleform.
+---@field a integer The alpha colour value of the scaleform.
+---@field target integer The scaleforms render target id.
+---@field target_name string The name of the scaleforms render target.
+---@field new fun(options: scaleform_options): scaleform
+---@field call fun(self: scaleform, method: string, args: any|table, ret_val: string?): any?
+---@field setfullscreen fun(self: scaleform, fullscreen: boolean): scaleform
+---@field setproperties fun(self: scaleform, x: number?, y: number?, width: number?, height: number?): scaleform
+---@field setcolour fun(self: scaleform, r: integer?, g: integer?, b: integer?, a: integer?): scaleform
+---@field setrender fun(self: scaleform, name: string, model: string|integer, large: boolean?, super_large: boolean?): scaleform
+---@field isdrawing fun(self: scaleform): boolean
+---@field draw fun(self: scaleform, await: boolean?, mask: scaleform?): scaleform|false?
+---@field stopdrawing fun(self: scaleform): scaleform
+---@field destroy fun(self: scaleform)
