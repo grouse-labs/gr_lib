@@ -110,7 +110,7 @@ function scaleform.new(options)
   local g = colour and colour.g or 255
   local b = colour and colour.b or 255
   local a = colour and colour.a or 255
-  local handle = not hud and req_scaleform(name) or type(hud) == 'number' and is_int(hud) and glib.stream.scaleformhud(hud)
+  local handle = not hud and name and req_scaleform(name) or type(hud) == 'number' and is_int(hud) and glib.stream.scaleformhud(hud)
   if not handle then error('failed to load scaleform: ' .. name) end
   obj.handle = handle
   obj.is_drawing = false
@@ -150,7 +150,7 @@ function scaleform:call(method, args, ret_val)
   local _type = self.frontend and 'frontend' or self.header and 'header' or self.hud and 'hud' or 'main'
   local begin = scaleform_methods[_type]
   local finish = not ret_val and EndScaleformMovieMethod or EndScaleformMovieMethodReturnValue
-  return call(function() return begin(self.handle, method) end, args, ret_val, finish)
+  return call(function() return begin(not self.hud and self.handle or self.hud, method) end, args, ret_val, finish)
 end
 
 ---@param fullscreen boolean Whether to set the scaleform to fullscreen.
@@ -261,7 +261,11 @@ end
 
 function scaleform:destroy()
   if self.target then ReleaseNamedRendertarget(self.target_name) end
-  if self.handle then SetScaleformMovieAsNoLongerNeeded(self.handle) end
+  if not self.hud then
+    SetScaleformMovieAsNoLongerNeeded(self.handle)
+  else
+    RemoveScaleformScriptHudMovie(self.hud)
+  end
   self = nil
 end
 

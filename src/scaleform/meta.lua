@@ -1,5 +1,5 @@
 ---@class scaleform_options
----@field name string The name of the scaleform.
+---@field name string? The name of the scaleform.
 ---@field screen {full: boolean?, frontend: boolean?, header: boolean?, hud: integer?, x: number?, y: number?}
 ---@field scale {width: number?, height: number?}?
 ---@field colour {r: integer?, g: integer?, b: integer?, a: integer?}?
