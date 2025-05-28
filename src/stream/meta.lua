@@ -1,8 +1,9 @@
 ---@class stream
----@field animdict fun(dictionary: string): boolean
----@field model fun(model: string|number): boolean
----@field ptfx fun(asset: string): boolean
----@field textdict fun(dictionary: string): boolean
----@field headshot fun(ped: integer): headshot_handle: integer|boolean
+---@field animdict fun(dictionary: string): loaded: boolean
+---@field model fun(model: string|number): loaded: boolean
+---@field ptfx fun(asset: string): loaded: boolean
+---@field textdict fun(dictionary: string): loaded: boolean
+---@field headshot fun(ped: integer, transparent: boolean?): headshot_handle: integer|false
+---@field scaleform fun(movie: string): scaleform_handle: integer|false
 ---@field scaleformhud fun(component: integer): scaleform_handle: boolean
----@field audio fun(bank: string, networked: boolean?): boolean
+---@field audio fun(bank: string, networked: boolean?): loaded: boolean

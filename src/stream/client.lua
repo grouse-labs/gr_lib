@@ -17,7 +17,7 @@ local function load_asset(asset, isloaded, load, retvals)
     local start = GetGameTimer()
     if not ret_val then load(asset) end
     repeat Wait(0) until isloaded(retvals and ret_val or asset) or timer(start, 5000)
-    if not isloaded(asset) then error('failed to load asset: ' .. asset) end
+    if not isloaded(retvals and ret_val or asset) then error('failed to load asset: ' .. asset) end
   end
   return ret_val or true
 end
@@ -44,12 +44,17 @@ function stream.textdict(dictionary)
   return load_asset(dictionary, HasStreamedTextureDictLoaded, RequestStreamedTextureDict)
 end
 
-function stream.headshot(ped)
+function stream.headshot(ped, transparent)
   if not is_int(ped) then error('bad argument #1 to `stream.headshot` (integer expected, got ' .. type(ped) .. ')') end
   return load_asset(ped, function(handle)
     ---@cast handle -string
     return IsPedheadshotReady(handle) and IsPedheadshotValid(handle)
-  end, RegisterPedheadshot, true)
+  end, not transparent and RegisterPedheadshot or RegisterPedheadshotTransparent, true)
+end
+
+function stream.scaleform(movie)
+  if type(movie) ~= 'string' then error('bad argument #1 to `stream.scaleform` (string expected, got ' .. type(movie) .. ')') end
+  return load_asset(movie, HasScaleformMovieLoaded, RequestScaleformMovie, true)
 end
 
 function stream.scaleformhud(component)
