@@ -10,7 +10,7 @@
 ---@field flush fun()
 ---@field findexternal fun(resource: string, prefix: string?): string[]
 ---@field getexternal fun(resource: string, key: string): string|number?
-
+---@field [string] function
 --[[
  # Example; equivalent to qb-inventory's `SaveInventory` export
   kvp.addmethod('saveplayerinventory', function(id, items)
