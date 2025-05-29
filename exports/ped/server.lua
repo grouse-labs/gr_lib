@@ -1,5 +1,7 @@
 local peds = {}
 
+--------------------- FUNCTIONS ---------------------
+
 local function ped_catch(netID, obj)
   if not obj or not obj.ped then return end
   if not DoesEntityExist(obj.ped) then return end
@@ -21,7 +23,11 @@ local function ped_remove(netID)
   peds[netID] = nil
 end
 
+--------------------- EVENTS ---------------------
+
 AddEventHandler('gr_lib:ped_catch', ped_catch)
 AddEventHandler('gr_lib:ped_remove', ped_remove)
 
-exports('getped', ped_get)
+--------------------- OBJECT ---------------------
+
+glib.getped = ped_get

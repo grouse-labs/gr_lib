@@ -1,7 +1,6 @@
 ---@diagnostic disable: duplicate-set-field
 local RESOURCE <const> = glib._RESOURCE
-local CONTEXT <const> = glib._CONTEXT
-local EVENT <const> = '__%s:%s:%s'
+local EVENT <const> = '__glib:%s:%s'
 
 local ped = {}
 
@@ -16,14 +15,14 @@ local function listen_to_ped_scope(obj)
       Wait(sleep)
       local owner = NetworkGetEntityOwner(entity)
       if owner ~= -1 and owner ~= obj.owner then
-        TriggerClientEvent(string.format(EVENT, RESOURCE, 'client', 'ped_initialise'), owner, netID, obj.options)
+        TriggerClientEvent(string.format(EVENT, 'client', 'ped_initialise'), owner, netID, obj.options)
         obj.owner = owner
         sleep = 1000
         if obj.options.onEnteredScope then
           obj.options.onEnteredScope(entity, owner)
         end
       elseif owner == -1 and obj.owner ~= -1 then
-        TriggerClientEvent(string.format(EVENT, RESOURCE, 'client', 'ped_destroy'), obj.owner, netID)
+        TriggerClientEvent(string.format(EVENT, 'client', 'ped_destroy'), obj.owner, netID)
         obj.owner = -1
         sleep = 2500
         if obj.options.onExitedScope then
@@ -144,7 +143,7 @@ function ped:doesexist() return self.exists end
 function ped:destroy()
   if self.exists then DeleteEntity(self.entity) end
   local netID = self.netID
-  TriggerClientEvent(string.format(EVENT, RESOURCE, 'client', 'ped_destroy'), -1, self.netID)
+  TriggerClientEvent(string.format(EVENT, 'client', 'ped_destroy'), -1, self.netID)
   TriggerEvent('gr_lib:ped_remove', netID)
   self = nil
 end

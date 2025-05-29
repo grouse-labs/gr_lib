@@ -1,7 +1,5 @@
 ---@diagnostic disable: duplicate-set-field
-local RESOURCE <const> = glib._RESOURCE
-local CONTEXT <const> = glib._CONTEXT
-local EVENT <const> = '__%s:%s:%s'
+local EVENT <const> = '__glib:%s:%s'
 
 local peds = {}
 local ped = {}
@@ -137,7 +135,9 @@ end
 
 --------------------- EVENTS ---------------------
 
-RegisterNetEvent(string.format(EVENT, RESOURCE, 'client', 'ped_initialise'), ped.catch)
-RegisterNetEvent(string.format(EVENT, RESOURCE, 'client', 'ped_destroy'), ped.remove)
+RegisterNetEvent(string.format(EVENT, 'client', 'ped_initialise'), ped.catch)
+RegisterNetEvent(string.format(EVENT, 'client', 'ped_destroy'), ped.remove)
 
-return {}
+--------------------- OBJECT ---------------------
+
+glib.getped = ped.get
