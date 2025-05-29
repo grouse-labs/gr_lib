@@ -6,7 +6,9 @@ description ''
 version '0'
 url ''
 
-server_script 'server/main.lua'
+shared_script 'exports/init.lua'
+server_script 'exports/**/server.lua'
+client_script 'exports/**/client.lua'
 
 files {
   'init.lua',

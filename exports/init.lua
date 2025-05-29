@@ -1,6 +1,5 @@
 if _VERSION:gsub('%D', '') < ('5.4'):gsub('%D', '') then error('Lua version 5.4 or higher is required', 0) end
 
-local RES_NAME <const> = GetCurrentResourceName()
 local GLIB <const> = 'gr_lib'
 
 local get_res_meta = GetResourceMetadata
@@ -12,9 +11,10 @@ local get_convar = GetConvar
 local debug_mode = get_convar('glib:debug', 'false') == 'true'
 
 local load, load_resource_file = load, LoadResourceFile
-local export = exports[GLIB]
 
 local CONTEXT <const> = IsDuplicityVersion() and 'server' or 'client'
+
+local debug_getinfo = debug.getinfo
 
 --------------------- FUNCTIONS ---------------------
 
@@ -36,24 +36,6 @@ local function import(glib, module)
   return glib[module]
 end
 
----@param glib CGlib
----@param index string
----@param ... any
----@return function
-local function call(glib, index, ...)
-  local module = rawget(glib, index) or import(glib, index)
-  if not module then
-    local method = function(...) return export[index](nil, ...) end
-    if index == 'audio' then
-      method = method()
-    elseif not ... then
-      glib[index] = method
-    end
-    module = method
-  end
-  return module
-end
-
 if CONTEXT == 'server' then
 
   ---@param src integer|string? The source to check.
@@ -68,32 +50,15 @@ end
 --------------------- OBJECT ---------------------
 
 ---@version 5.4
----@class CGlib
----@field _VERSION string
----@field _URL string
----@field _DESCRIPTION string
----@field _DEBUG boolean
----@field _RESOURCE string
----@field _CONTEXT string
----@field callback CCallback
----@field enum fun(name: string|enum_options, tbl: enum_options?): enum|fun(name: string|enum_options, tbl: enum_options?): enum
----@field audio audio
----@field kvp kvp
----@field ped ped
----@field stream stream
----@field scaleform fun(scaleform_options: scaleform_options): scaleform
----@field getped fun(netID: integer): ped|nil Returns a ped object from a network ID. <br> If the ped does not exist, it will return `nil`.
----@field print fun(...): msg: string Prints a message to the console. <br> If `glib:debug` is set to `false`, it will not print the message. <br> Returns the message that was printed.
----@field require fun(module_name: string): module: unknown `mod_name` needs to be a dot seperated path from resource to module. <br> Credits to [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`require`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L149).
 local glib = setmetatable({
   _VERSION = VERSION,
   _URL = URL,
   _DESCRIPTION = DES,
   _DEBUG = debug_mode,
-  _RESOURCE = RES_NAME,
+  _RESOURCE = GLIB,
   _CONTEXT = CONTEXT,
   print = function(...)
-    local msg = '^3['..RES_NAME..']^7 - '..(...)
+    local msg = '^3['..GLIB..']^7 - '..(...)
     if debug_mode then
       print(msg)
     end
@@ -105,22 +70,25 @@ local glib = setmetatable({
   __tostring = function(t)
     local address = string.format('%s: %p', GLIB, t)
     if debug_mode then
-      local msg = string.format('^3[%s]^7 - ^2library^7 ^5\'%s\'^7 v^5%s^7\n%s', RES_NAME, GLIB, VERSION, address)
+      local msg = string.format('^3[%s]^7 - ^2library^7 ^5\'%s\'^7 v^5%s^7\n%s', GLIB, GLIB, VERSION, address)
       for k, v in pairs(t) do
         if type(v) == 'table' then
-          msg = msg..string.format('\n^3[%s]^7 - ^2`glib` module^7 ^5\'%s\'^7 ^2is loaded^7\n%s: %p', RES_NAME, k, k, v)
+          msg = msg..string.format('\n^3[%s]^7 - ^2`glib` module^7 ^5\'%s\'^7 ^2is loaded^7\n%s: %p', GLIB, k, k, v)
         end
       end
     return msg
     end
     return address
   end,
-  __index = call,
-  __call = call
-})
+  __newindex = function(glib, key, fn)
+    rawset(glib, key, fn)
+    if debug_getinfo(2, 'S').short_src:find('@gr_lib/exports')  then
+      exports(key, fn)
+    end
+  end,
+  __index = import
+}) --[[@as CGlib]]
 
 _ENV.glib = glib
 _ENV.enum = glib.enum
 _ENV.require = glib.require
-
-return glib
