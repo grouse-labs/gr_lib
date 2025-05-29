@@ -1,0 +1,11 @@
+---@class audio
+---@field getsoundid fun(create: boolean?): integer
+---@field releasesoundid fun(id: integer?)
+---@field awaitsound fun(id: integer, cb: fun()?, sleep: integer?)
+---@field playsound fun(create_id: boolean?, bank: string, sound_name: string, ref: string?, networked: boolean?, in_replay: boolean?, loops: integer?)
+---@field playsoundfromentity fun(create_id: boolean?, bank: string, sound_name: string, entity: integer, ref: string?, networked: boolean?, in_replay: boolean?, loops: integer?)
+---@field playsoundatpos fun(create_id: boolean?, bank: string, sound_name: string, pos: vector3, ref: string?, range: integer?, networked: boolean?, in_replay: boolean?, loops: integer?)
+---@field updatecoords fun(pos: vector3, id: integer?)
+---@field stopsound fun(id: integer?)
+---@field setvariable fun(name: string, value: any, id: integer?)
+---@field getactive fun(): table
