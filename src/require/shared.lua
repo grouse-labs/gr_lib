@@ -43,7 +43,7 @@ local function bld_mod_preload_cache(mod_name, contents)
 end
 
 ---@param mod_name string The name of the module to load. <br> This has to be a dot-separated path to the module. <br> For example, `bridge.init`.
----@return module|function|table|false result, string errmsg
+---@return function|table|false result, string errmsg
 local function load_module(mod_name)
   local current_package = ''
   local errmsg = ''
@@ -87,10 +87,10 @@ function package.searchpath(mod_name, pattern) -- Based on the Lua [`package.sea
   return package.preload[mod_name] and mod_name or false, errmsg
 end
 
----@type (fun(mod_name: string, env: table?): module|function|false, string)[]
+---@type (fun(mod_name: string, env: table?): function|false, string)[]
 package.searchers = {
   ---@param mod_name string
-  ---@return module|function|table|false result, string errmsg
+  ---@return function|table|false result, string errmsg
   function(mod_name)
     local success, contents = pcall(_require, mod_name)
     if success then
@@ -101,7 +101,7 @@ package.searchers = {
     return false, contents
   end,
   ---@param mod_name string
-  ---@return module|function|table|false result, string errmsg
+  ---@return function|table|false result, string errmsg
   function(mod_name)
     local mod_path, err = package.searchpath(mod_name)
     if mod_path and not err then
