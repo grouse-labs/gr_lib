@@ -14,6 +14,8 @@ local debug_mode = get_convar('glib:debug', 'false') == 'true'
 local load, load_resource_file = load, LoadResourceFile
 local export = exports[GLIB]
 
+-- local resource_states = enum('resource_states')
+
 local CONTEXT <const> = IsDuplicityVersion() and 'server' or 'client'
 
 --------------------- FUNCTIONS ---------------------
@@ -54,6 +56,13 @@ local function call(glib, index, ...)
   return module
 end
 
+-- ---@param resource_name string
+-- ---@return boolean? valid
+-- function IsResourceValid(resource_name)
+--   local state = GetResourceState(resource_name)
+--   return resource_states:search(state) and resource_states:search(state) ~= 'invalid'
+-- end
+
 if CONTEXT == 'server' then
 
   ---@param src integer|string? The source to check.
@@ -75,7 +84,6 @@ end
 ---@field _DEBUG boolean
 ---@field _RESOURCE string
 ---@field _CONTEXT string
----@field callback CCallback
 ---@field enum fun(name: string|enum_options, tbl: enum_options?): enum|fun(name: string|enum_options, tbl: enum_options?): enum
 ---@field audio audio
 ---@field kvp kvp
