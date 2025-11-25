@@ -110,8 +110,8 @@ function scaleform.new(options)
   local g = colour and colour.g or 255
   local b = colour and colour.b or 255
   local a = colour and colour.a or 255
-  local handle = not hud and name and req_scaleform(name) or type(hud) == 'number' and is_int(hud) and glib.stream.scaleformhud(hud)
-  if not handle then error('failed to load scaleform: ' .. name) end
+  local handle = name and glib.stream.scaleform(name) or type(hud) == 'number' and is_int(hud) and glib.stream.scaleformhud(hud)
+  if (name or type(hud) == 'number' and is_int(hud)) and not handle then error('failed to load scaleform: ' .. name) end
   obj.handle = handle
   obj.is_drawing = false
   obj.fullscreen = full
@@ -146,11 +146,17 @@ local scaleform_methods = {
 ---@param ret_val string? The return value type.
 ---@return any?
 function scaleform:call(method, args, ret_val)
-  if not self.handle then error('attempted to call method with invalid scaleform handle') end
+  if not self.handle and not self.frontend then error('attempted to call method with invalid scaleform handle') end
   local _type = self.frontend and 'frontend' or self.header and 'header' or self.hud and 'hud' or 'main'
   local begin = scaleform_methods[_type]
   local finish = not ret_val and EndScaleformMovieMethod or EndScaleformMovieMethodReturnValue
-  return call(function() return begin(not self.hud and self.handle or self.hud, method) end, args, ret_val, finish)
+  return call(function()
+    if not self.frontend and not self.header then
+      return begin(not self.hud and self.handle or self.hud, method)
+    else
+      return begin(method)
+    end
+  end, args, ret_val, finish)
 end
 
 ---@param fullscreen boolean Whether to set the scaleform to fullscreen.
