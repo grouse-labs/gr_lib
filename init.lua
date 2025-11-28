@@ -15,6 +15,7 @@ local load, load_resource_file = load, LoadResourceFile
 local export = exports[GLIB]
 
 -- local resource_states = enum('resource_states')
+local VALID_STATES <const> = {['started'] = true, ['starting'] = true}
 
 local CONTEXT <const> = IsDuplicityVersion() and 'server' or 'client'
 
@@ -56,12 +57,12 @@ local function call(glib, index, ...)
   return module
 end
 
--- ---@param resource_name string
--- ---@return boolean? valid
--- function IsResourceValid(resource_name)
---   local state = GetResourceState(resource_name)
---   return resource_states:search(state) and resource_states:search(state) ~= 'invalid'
--- end
+---@param resource_name string
+---@return boolean? valid
+function IsResourceValid(resource_name)
+  local state = GetResourceState(resource_name)
+  return VALID_STATES[state] ~= nil
+end
 
 if CONTEXT == 'server' then
 
