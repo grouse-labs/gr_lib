@@ -47,7 +47,7 @@ local function call(glib, index, ...)
   local module = rawget(glib, index) or import(glib, index)
   if not module then
     local method = function(...) return export[index](nil, ...) end
-    if index == 'audio' then
+    if index == 'audio' or index  =='github' then
       method = method()
     elseif not ... then
       glib[index] = method
