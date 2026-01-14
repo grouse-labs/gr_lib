@@ -3,6 +3,11 @@ local active_sounds = {}
 
 --------------------- FUNCTIONS ---------------------
 
+---@async
+---@param id integer
+---@param args any[]
+---@param loops integer
+---@param method function
 local function loop_sound(id, args, loops, method)
   CreateThread(function()
     local lim = loops > 0 and loops
@@ -21,6 +26,8 @@ local function loop_sound(id, args, loops, method)
   end)
 end
 
+---@param create boolean?
+---@return integer id, integer index
 function audio.getsoundid(create)
   local active_sound = -1
   if not create then
@@ -43,24 +50,37 @@ function audio.getsoundid(create)
   return active_sounds[active_sound], active_sound
 end
 
+---@param id integer
 function audio.releasesoundid(id)
   id = id or audio.getsoundid()
   if not id or id < 0 then return end
   ReleaseSoundId(id)
 end
 
+---@param id integer
+---@param cb function?
+---@param sleep integer?
+---@return unknown?
 function audio.awaitsound(id, cb, sleep)
   sleep = sleep or 0
   repeat
     Wait(sleep)
   until HasSoundFinished(id)
   if cb and type(cb) == 'function' then
-    cb()
+    return cb()
   end
 end
 
+---@param create_id boolean?
+---@param bank string
+---@param sound_name string
+---@param ref string
+---@param networked boolean
+---@param in_replay true
+---@param loops integer
+---@return integer id
 function audio.playsound(create_id, bank, sound_name, ref, networked, in_replay, loops)
-  if bank and bank ~= '' and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
+  if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
   PlaySoundFrontend(id, sound_name, ref or '0', in_replay or false)
   ReleaseNamedScriptAudioBank(bank)
@@ -74,6 +94,15 @@ function audio.playsound(create_id, bank, sound_name, ref, networked, in_replay,
   return id
 end
 
+---@param create_id boolean?
+---@param bank string
+---@param sound_name string
+---@param entity integer
+---@param ref string
+---@param networked boolean
+---@param in_replay true
+---@param loops integer
+---@return integer id
 function audio.playsoundfromentity(create_id, bank, sound_name, entity, ref, networked, in_replay, loops)
   if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
@@ -91,6 +120,16 @@ function audio.playsoundfromentity(create_id, bank, sound_name, entity, ref, net
   return id
 end
 
+---@param create_id boolean?
+---@param bank string
+---@param sound_name string
+---@param pos vector3|{x: number, y: number, z: number}
+---@param ref string
+---@param range number
+---@param networked boolean
+---@param in_replay true
+---@param loops integer
+---@return integer id
 function audio.playsoundatcoords(create_id, bank, sound_name, pos, ref, range, networked, in_replay, loops)
   if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
@@ -111,12 +150,15 @@ function audio.playsoundatcoords(create_id, bank, sound_name, pos, ref, range, n
   return id
 end
 
+---@param coords vector3|{x: number, y: number, z: number}
+---@param id integer?
 function audio.updatecoords(coords, id)
   id = id or audio.getsoundid()
   if not id or id < 0 then return end
   UpdateSoundCoord(id, coords.x, coords.y, coords.z)
 end
 
+---@param id integer?
 function audio.stopsound(id)
   id = id or audio.getsoundid()
   if not id or id < 0 then return end
@@ -124,12 +166,16 @@ function audio.stopsound(id)
   audio.awaitsound(id, audio.releasesoundid)
 end
 
+---@param variable string
+---@param value number
+---@param id integer
 function audio.setvariable(variable, value, id)
   id = id or audio.getsoundid()
   if not id or id < 0 then return end
   SetVariableOnSound(id, variable, value)
 end
 
+---@return integer[]
 function audio.getactive()
   return active_sounds
 end

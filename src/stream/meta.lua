@@ -5,5 +5,5 @@
 ---@field textdict fun(dictionary: string): loaded: boolean
 ---@field headshot fun(ped: integer, transparent: boolean?): headshot_handle: integer|false
 ---@field scaleform fun(movie: string): scaleform_handle: integer|false
----@field scaleformhud fun(component: integer): scaleform_handle: boolean
+---@field scaleformhud fun(component: integer): loaded: boolean
 ---@field audio fun(bank: string, networked: boolean?): loaded: boolean

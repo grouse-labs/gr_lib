@@ -1,0 +1,6 @@
+---@class callback
+---@field register fun(name: string, cb: fun(...): ...)
+---@field trigger fun(player: integer|string, name: string, cb: (fun(...): ...), ...: any)
+---@field await fun(player: integer|string, name: string, ...: any): ...
+---@field trigger fun(name: string, delay: integer|false?, cb: (fun(...): ...), ...: any)
+---@field await fun(name: string, delay: integer|false?, ...: any): ...

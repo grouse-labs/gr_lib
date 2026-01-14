@@ -1,0 +1,2 @@
+---@class github
+---@field check fun(resource: string?, git: string, repo: string?)

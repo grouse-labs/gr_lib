@@ -87,8 +87,10 @@ end
 ---@field _CONTEXT string
 ---@field enum fun(name: string|enum_options, tbl: enum_options?): enum|fun(name: string|enum_options, tbl: enum_options?): enum
 ---@field audio audio
+---@field callback callback
 ---@field kvp kvp
 ---@field ped ped
+---@field github github
 ---@field stream stream
 ---@field scaleform fun(scaleform_options: scaleform_options): scaleform
 ---@field getped fun(netID: integer): ped|nil Returns a ped object from a network ID. <br> If the ped does not exist, it will return `nil`.
