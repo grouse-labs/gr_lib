@@ -36,17 +36,6 @@ local function import(glib, module)
   return glib[module]
 end
 
-if CONTEXT == 'server' then
-
-  ---@param src integer|string? The source to check.
-  ---@return boolean? valid
-  function IsSrcAPlayer(src)
-    src = src or source
-    return tonumber(src) and tonumber(src) > 0 and DoesPlayerExist(src)
-  end
-
-end
-
 --------------------- OBJECT ---------------------
 
 ---@version 5.4
@@ -92,3 +81,16 @@ local glib = setmetatable({
 _ENV.glib = glib
 _ENV.enum = glib.enum
 _ENV.require = glib.require
+
+--------------------- ENV FUNCTIONS ---------------------
+
+if CONTEXT == 'server' then
+
+  ---@param src integer|string? The source to check.
+  ---@return boolean? valid
+  function IsSrcAPlayer(src)
+    src = src or source
+    return tonumber(src) and tonumber(src) > 0 and DoesPlayerExist(src)
+  end
+
+end

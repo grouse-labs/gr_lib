@@ -14,9 +14,6 @@ local debug_mode = get_convar('glib:debug', 'false') == 'true'
 local load, load_resource_file = load, LoadResourceFile
 local export = exports[GLIB]
 
--- local resource_states = enum('resource_states')
-local VALID_STATES <const> = {['started'] = true, ['starting'] = true}
-
 local CONTEXT <const> = IsDuplicityVersion() and 'server' or 'client'
 
 --------------------- FUNCTIONS ---------------------
@@ -55,24 +52,6 @@ local function call(glib, index, ...)
     module = method
   end
   return module
-end
-
----@param resource_name string
----@return boolean? valid
-function IsResourceValid(resource_name)
-  local state = GetResourceState(resource_name)
-  return VALID_STATES[state] ~= nil
-end
-
-if CONTEXT == 'server' then
-
-  ---@param src integer|string? The source to check.
-  ---@return boolean? valid
-  function IsSrcAPlayer(src)
-    src = src or source
-    return tonumber(src) and tonumber(src) > 0 and DoesPlayerExist(src)
-  end
-
 end
 
 --------------------- OBJECT ---------------------
@@ -133,5 +112,26 @@ local glib = setmetatable({
 _ENV.glib = glib
 _ENV.enum = glib.enum
 _ENV.require = glib.require
+
+--------------------- ENV FUNCTIONS ---------------------
+local resource_states = enum('resource_states')
+
+---@param resource_name string
+---@return boolean? valid
+function IsResourceValid(resource_name)
+  local state = GetResourceState(resource_name)
+  return resource_states:search(state) and resource_states:search(state) ~= 'invalid'
+end
+
+if CONTEXT == 'server' then
+
+  ---@param src integer|string? The source to check.
+  ---@return boolean? valid
+  function IsSrcAPlayer(src)
+    src = src or source
+    return tonumber(src) and tonumber(src) > 0 and DoesPlayerExist(src)
+  end
+
+end
 
 return glib
