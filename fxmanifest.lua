@@ -1,10 +1,10 @@
 fx_version 'cerulean'
 game 'gta5'
 
-author ''
-description ''
+author 'Grouse Labs'
+description 'A library of portable FiveM lua modules.'
 version '0'
-url ''
+url 'https://github.com/grouse-labs/gr_lib'
 
 shared_script 'exports/init.lua'
 server_script 'exports/**/server.lua'
