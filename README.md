@@ -4,13 +4,13 @@ A library of portable FiveM lua modules.
 
 ## Features
 
-- **require** (Now) a toned-back recreation of the Lua `package` library in pure lua, allowing you to import and use modules in your scripts.
-- **audio** Allows full manipulation of FiveM native audio, with variables, looping and cancelling.
-- **callback** It's just [ox_lib's callback system](https://github.com/overextended/ox_lib/tree/master/imports/callback) incase for some reason you're not using that resource...
-- **enum** Creates C-style enums which can be either global or local and have O(1) index time.
-- **kvp** Exposes FiveM KVP functions, with accessible parameters, allowing more robust database usage.
-- **scaleform** Complete scaleform manager, exposing Frontend, HUD, Header, Fullscreen and RenderTarget scaleforms.
-- **stream** Streaming asset loader, exposing most needed streaming functions with baked-in timeouts.
+- **require** | (Now) a toned-back recreation of the Lua `package` library in pure lua, allowing you to import and use modules in your scripts.
+- **audio** | Allows full manipulation of FiveM native audio, with variables, looping and cancelling.
+- **callback** | It's just [ox_lib's callback system](https://github.com/overextended/ox_lib/tree/master/imports/callback) incase for some reason you're not using that resource...
+- **enum** | Creates C-style enums which can be either global or local and have O(1) index time.
+- **kvp** | Exposes FiveM KVP functions, with accessible parameters, allowing more robust database usage.
+- **scaleform** | Complete scaleform manager, exposing Frontend, HUD, Header, Fullscreen and RenderTarget scaleforms.
+- **stream** | Streaming asset loader, exposing most needed streaming functions with baked-in timeouts.
   
 ## Table of Contents
 
