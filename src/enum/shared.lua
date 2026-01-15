@@ -41,7 +41,7 @@ local function stringify(obj, indent)
 
   for k, v in pairs(obj) do
     local key_type = type(k)
-    local key = key_type == 'string' and ('%s'):format(k) or ('[%s]'):format(tostring(k))
+    local key = key_type == 'string' and ('[\'%s\']'):format(k) or ('[%s]'):format(tostring(k))
     if type(v) == 'table' then
       local nested_str = stringify(v, indent + 1)
       if obj_type == 'array' then
