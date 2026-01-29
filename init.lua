@@ -67,11 +67,13 @@ end
 ---@field enum fun(name: string|enum_options, tbl: enum_options?): enum|fun(name: string|enum_options, tbl: enum_options?): enum
 ---@field audio audio
 ---@field callback callback
+---@field locale locale
 ---@field kvp kvp
 ---@field ped ped
 ---@field github github
 ---@field stream stream
----@field scaleform fun(scaleform_options: scaleform_options): scaleform
+---@field scaleform fun(options: scaleform_options): scaleform
+---@field netscene fun(options: scene_options): netscene
 ---@field getped fun(netID: integer): ped|nil Returns a ped object from a network ID. <br> If the ped does not exist, it will return `nil`.
 ---@field print fun(...): msg: string Prints a message to the console. <br> If `glib:debug` is set to `false`, it will not print the message. <br> Returns the message that was printed.
 ---@field require fun(module_name: string): module: unknown `mod_name` needs to be a dot seperated path from resource to module. <br> Credits to [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`require`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L149).
