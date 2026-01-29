@@ -8,8 +8,8 @@
 local RESOURCE = glib._RESOURCE
 local get_resource_state = GetResourceState
 local _require = require
-
 local resource_states = enum('resource_states')
+local state_cache = {}
 
 --------------------- OBJECT ---------------------
 
@@ -23,11 +23,15 @@ local package = {
 
 --------------------- FUNCTIONS ---------------------
 
----@param resource_name string
+---@param resource string
 ---@return boolean? valid
-local function is_resource_valid(resource_name)
-  local state = get_resource_state(resource_name)
-  return resource_states.valid[state] and not resource_states.invalid[state]
+local function is_resource_valid(resource)
+  local cached = state_cache[resource]
+  if cached ~= nil then return cached end
+  local state = get_resource_state(resource)
+  cached = resource_states:search(state) and resource_states:search(state) ~= 'invalid'
+  state_cache[resource] = cached
+  return cached
 end
 
 ---@param mod_name string
@@ -107,6 +111,17 @@ package.searchers = {
       return package.preload[mod_path] and package.preload[mod_path](), mod_path
     end
     return false, 'module \''..mod_name..'\' not found'..(err and '\n\t'..err or '')
+  end,
+  ---@param mod_name string
+  ---@return function|table|false result, string errmsg
+  function(mod_name)
+    local success, contents = pcall(_require, mod_name)
+    if success then
+      mod_name = mod_name:match('([^%.]+)$')
+      bld_mod_preload_cache(mod_name, function() return contents end)
+      return package.preload[mod_name](), mod_name
+    end
+    return false, contents
   end
 }
 
