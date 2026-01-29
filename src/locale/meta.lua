@@ -1,0 +1,6 @@
+---@class locale
+---@field load fun(context: string?, data: table)
+---@field set fun(key: string, value: string)
+---@field loadfile fun(resource: string?, file: string?)
+---@field translate fun(key: string, data: table?): string
+---@field iskeyvalid fun(key: string): boolean
