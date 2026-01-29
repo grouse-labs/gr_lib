@@ -61,45 +61,42 @@ end
 
 ---@param mod_name string The name of the module to search for. <br> This has to be a dot-separated path to the module. <br> For example, `bridge.init`.
 ---@param pattern string? A pattern to search for the module. <br> This has to be a string with a semicolon-separated list of paths. <br> For example, `./?.lua;./?/init.lua`.
----@return string mod_path, string? errmsg The path to the module, and an error message if the module was not found.
+---@return string|false mod_path, string? errmsg The path to the module, and an error message if the module was not found.
 function package.searchpath(mod_name, pattern) -- Based on the Lua [`package.searchpath`](https://github.com/lua/lua/blob/c1dc08e8e8e22af9902a6341b4a9a9a7811954cc/loadlib.c#L474) function, [Lua Modules Loader](http://lua-users.org/wiki/LuaModulesLoader) by @lua-users & ox_lib's [`package.searchpath`](https://github.com/overextended/ox_lib/blob/cdf840fc68ace1f4befc78555a7f4f59d2c4d020/imports/require/shared.lua#L50) function.
   if type(mod_name) ~= 'string' then error('bad argument #1 to \'search_path\' (string expected, got '..type(mod_name)..')', 2) end
-  local mod_path = mod_name:gsub('%.', '/')
-  local resource, dir, contents = mod_name:match('^%@?(%w+%_?%-?%w+)'), '', ''
+  local resource, remainder = mod_name:match('^@?(%w[%w_-]*)%.(.+)$')
+  local mod_path
+  local resolved_name
   local errmsg = nil
   pattern = pattern or package.path
-  if not is_resource_valid(resource) then resource = RESOURCE; mod_path = RESOURCE..'/'..mod_path end
+  if resource and is_resource_valid(resource) then
+    mod_path = remainder:gsub('%.', '/')
+    resolved_name = resource..'.'..remainder
+  else
+    resource = RESOURCE
+    mod_path = mod_name:gsub('%.', '/')
+    resolved_name = mod_name
+  end
   for subpath in pattern:gmatch('[^;]+') do
     local file = subpath:gsub('%?', mod_path)
-    dir = file:match('^./%@?%w+%_?%-?%w+(.*)')
-    mod_name = resource..dir:gsub('%/', '.'):gsub('.lua', '') --[[@as string]]
-    if package.preload[mod_name] then return mod_name end
-    contents = LoadResourceFile(resource, dir)
+    local dir = file:gsub('^%./', '')
+    if package.preload[resolved_name] then return resolved_name end
+
+    local contents = LoadResourceFile(resource, dir)
     if contents then
-      local module_fn, err = load(contents, '@@'..resource..dir, 't', _ENV)
-      if module_fn then
-        bld_mod_preload_cache(mod_name, module_fn)
-        break
+      local fn, err = load(contents, '@@'..resource ..'/'..dir, 't', _ENV)
+      if fn then
+        bld_mod_preload_cache(resolved_name, fn)
+        return resolved_name
       end
-      errmsg = (errmsg or '')..(err and '\n\t'..err or '')
+      errmsg = (errmsg or '')..'\n\t'..err
     end
   end
-  return package.preload[mod_name] and mod_name or false, errmsg
+  return false, errmsg
 end
 
 ---@type (fun(mod_name: string, env: table?): function|false, string)[]
 package.searchers = {
-  ---@param mod_name string
-  ---@return function|table|false result, string errmsg
-  function(mod_name)
-    local success, contents = pcall(_require, mod_name)
-    if success then
-      mod_name = mod_name:match('([^%.]+)$')
-      bld_mod_preload_cache(mod_name, function() return contents end)
-      return package.preload[mod_name](), mod_name
-    end
-    return false, contents
-  end,
   ---@param mod_name string
   ---@return function|table|false result, string errmsg
   function(mod_name)
