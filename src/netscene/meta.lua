@@ -1,7 +1,7 @@
 ---@class scene_options
 ---@field scene {coords: vector3, rotation: vector3, order: integer?, hold: boolean?, looped: boolean?, stop_phase: number?, start_phase: number?, speed: number?}
----@field peds {dict: string, anim: string, entity: integer, model: integer|string, blend_in: number?, blend_out: number?, scene_flags: integer?, ragdoll_flags: integer?, move_delta: number?, ik_flags: integer?}[]
----@field objs {dict: string, anim: string, entity: integer, model: integer|string, door: boolean?, blend_in: number?, blend_out: number?, scene_flags: integer?}
+---@field peds {dict: string, anim: string, entity: integer?, model: integer|string?, blend_in: number?, blend_out: number?, scene_flags: integer?, ragdoll_flags: integer?, move_delta: number?, ik_flags: integer?}[]?
+---@field objs {dict: string, anim: string, entity: integer?, model: integer|string?, door: boolean?, blend_in: number?, blend_out: number?, scene_flags: integer?}?
 
 ---@class netscene
 ---@field nethandle integer
@@ -17,7 +17,7 @@
 ---@field peds integer[]
 ---@field objs integer[]
 ---@field new fun(scene_options): netscene
----@field stop fun()
----@field start fun()
----@field clear fun(peds: boolean, objs: boolean)
----@field getphase fun(): number
+---@field stop fun(self: netscene)
+---@field start fun(self: netscene, cb: function)
+---@field clear fun(self: netscene, peds: boolean, objs: boolean)
+---@field getphase fun(self: netscene): number
