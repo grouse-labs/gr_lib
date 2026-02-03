@@ -131,10 +131,10 @@ end
 ---@param loops integer
 ---@return integer id
 function audio.playsoundatcoords(create_id, bank, sound_name, pos, ref, range, networked, in_replay, loops)
-  if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
+  if bank and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
   PlaySoundFromCoord(id, sound_name, pos.x, pos.y, pos.z, ref or '0', networked, range, in_replay or false)
-  ReleaseNamedScriptAudioBank(bank)
+  if bank then ReleaseNamedScriptAudioBank(bank) end
   if loops then
     loop_sound(id, {
       sound_name,
