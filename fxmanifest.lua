@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Grouse Labs'
 description 'A library of portable FiveM lua modules.'
-version '1.0.0'
+version '1.0.9'
 url 'https://github.com/grouse-labs/gr_lib'
 
 shared_script 'exports/init.lua'
