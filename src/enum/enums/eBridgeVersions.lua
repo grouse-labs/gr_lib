@@ -20,5 +20,12 @@ return {
 	['target'] = {
 		['ox_target'] = "1.17.2",
 		['qb-target'] = "5.5.0"
+	},
+	['doorlock'] = {
+		['ox_doorlock'] = "1.17.2",
+		['qb-doorlock'] = "2.0.0"
+	},
+	['weather'] = {
+		['qb-weathersync'] = "2.1.1"
 	}
 }
