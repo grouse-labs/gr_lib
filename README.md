@@ -9,7 +9,9 @@ A library of portable FiveM lua modules.
 - **callback** | It's just [ox_lib's callback system](https://github.com/overextended/ox_lib/tree/master/imports/callback) incase for some reason you're not using that resource...
 - **enum** | Creates C-style enums which can be either global or local and have O(1) index time.
 - **kvp** | Exposes FiveM KVP functions, with accessible parameters, allowing more robust database usage.
+- **locale** | A localisation and translation module, based on the [i18n.lua library by kikito](https://github.com/kikito/i18n.lua/tree/master).
 - **scaleform** | Complete scaleform manager, exposing Frontend, HUD, Header, Fullscreen and RenderTarget scaleforms.
+- **netscene** | Complete netscne manager, allowing for quick and easy setup of netscenes.
 - **stream** | Streaming asset loader, exposing most needed streaming functions with baked-in timeouts.
   
 ## Table of Contents
