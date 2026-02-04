@@ -3,8 +3,8 @@ local table = table
 ---@diagnostic disable-next-line: deprecated
 local unpack = table.unpack or unpack
 local FORMAT_CHARS = {c = 1, d = 1, E = 1, e = 1, f = 1, g = 1, G = 1, i = 1, o = 1, u = 1, X = 1, x = 1, s = 1, q = 1, ['%'] = 1}
-local default_locale = GetConvar('locale', 'en')
-local dialect = default_locale:gsub('-.+', '')
+local default_locale = GetConvar('locale', '')
+local lang, dialect = default_locale:match('([^%-]+)%-(.+)')
 local storage = {}
 local locale = {}
 
@@ -164,9 +164,12 @@ end
 ---@param file string? The name of the file to load. <br> This has to be a dot-notated path to the file. <br> The default is `locales.<dialect>`.
 function locale.loadfile(resource, file)
   resource = resource or RESOURCE
-  file = file or ('locales.'..dialect) --[[@as string]]
-  local translations = require(resource..'.'..file)
-  recursive_load(file:match('[^.]+$'), translations)
+  file = file or ('locales.'..lang..'-'..dialect) --[[@as string]]
+  local found, translations = pcall(require, resource..'.'..file)
+  if found then recursive_load(file:match('[^.]+$'), translations) end
+  found, translations = pcall(require, resource..'.locales.'..lang)
+  if not found then return end
+  recursive_load(lang, translations)
 end
 
 ---@param key string The key to translate.
