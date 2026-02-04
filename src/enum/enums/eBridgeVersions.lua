@@ -26,6 +26,7 @@ return {
 		['qb-doorlock'] = "2.0.0"
 	},
 	['weather'] = {
+		['Renewed-Weathersync'] = "1.1.8",
 		['qb-weathersync'] = "2.1.1"
 	}
 }

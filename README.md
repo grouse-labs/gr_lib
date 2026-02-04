@@ -41,6 +41,7 @@ A library of portable FiveM lua modules.
 - [overextended](https://github.com/overextended/ox_lib/)
 - [0xWaleed](https://github.com/citizenfx/fivem/pull/736)
 - [DurtyFrees' Data Dumps](https://github.com/DurtyFree/gta-v-data-dumps)
+- [kikito](https://github.com/kikito/i18n.lua/tree/master)
 
 ### Installation
 
@@ -48,6 +49,7 @@ A library of portable FiveM lua modules.
 - Download the latest version from [releases](https://github.com/grouse-labs/gr_lib/releases/latest).
 - Extract the contents of the zip file into your resources folder, into a folder which starts after your framework or;
 - Ensure the script in your `server.cfg` after your framework and before any script this is a dependency for.
+- Change `sets locale "en-AU"` to `setr locale "en-AU"` in your `server.cfg` and make sure it's updated to your [language code](https://gist.github.com/Josantonius/b455e315bc7f790d14b136d61d9ae469).
 
 ### Configuration
 
