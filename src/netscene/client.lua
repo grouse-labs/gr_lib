@@ -8,6 +8,7 @@ local _mt = {
 --------------------- FUNCTIONS ---------------------
 
 ---@param scene_options scene_options
+---@return netscene
 function netscene.new(scene_options)
   local obj = setmetatable({}, _mt)
   local scene_data = scene_options.scene
@@ -111,6 +112,8 @@ function netscene:stop()
   NetworkStopSynchronisedScene(self.nethandle)
 end
 
+---@param cb fun(phase: number, ...: unknown): boolean
+---@param ... unknown Arguments to parse to the callback function.
 function netscene:start(cb, ...)
   local handle = self.nethandle
   NetworkStartSynchronisedScene(handle)
@@ -139,6 +142,7 @@ function netscene:clear(peds, objs)
   end
 end
 
+---@return number
 function netscene:getphase()
   self.handle = IsSynchronizedSceneRunning(self.handle) and self.handle or NetworkGetLocalSceneFromNetworkId(self.nethandle)
   return GetSynchronizedScenePhase(self.handle)
