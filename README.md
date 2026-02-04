@@ -29,6 +29,7 @@ A library of portable FiveM lua modules.
       - [callback](#callback)
       - [enum](#enum)
       - [kvp](#kvp)
+      - [locale](#locale)
       - [scaleform](#scaleform)
       - [stream](#stream)
 
@@ -296,6 +297,31 @@ function kvp.findexternal(resource, prefix)
 ---@param key string
 ---@return string|number? value
 function kvp.getexternal(resource, key)
+```
+
+#### locale
+
+```lua
+---@param context string? The context to load into.
+---@param data table The data to load.
+function locale.load(context, data)
+
+---@param key string A dot-separated key.
+---@param value string A phrase to set.
+function locale.set(key, value)
+
+---@param resource string? The resource name.
+---@param file string? The name of the file to load. <br> This has to be a dot-notated path to the file. <br> The default is `locales.<dialect>`.
+function locale.loadfile(resource, file)
+
+---@param key string The key to translate.
+---@param data table? The data to interpolate.
+---@return string string The translated phrase.
+function locale.translate(key, data)
+
+---@param key string
+---@return boolean
+function locale.iskeyvalid(key)
 ```
 
 #### scaleform
