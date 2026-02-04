@@ -188,6 +188,8 @@ function locale.translate(key, data)
   return data.default
 end
 
+---@param key string
+---@return boolean
 function locale.iskeyvalid(key) return locale.translate(key) ~= nil end
 
 --------------------- OBJECT ---------------------
