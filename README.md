@@ -31,6 +31,7 @@ A library of portable FiveM lua modules.
       - [kvp](#kvp)
       - [locale](#locale)
       - [scaleform](#scaleform)
+      - [netscene](#netscene)
       - [stream](#stream)
 
 ### Credits
@@ -383,6 +384,34 @@ function scaleform:draw(await, mask)
 function scaleform:stopdrawing()
 
 function scaleform:destroy()
+```
+
+#### netscene
+
+```lua
+---@class scene_options
+---@field scene {coords: vector3, rotation: vector3, order: integer?, hold: boolean?, looped: boolean?, stop_phase: number?, start_phase: number?, speed: number?}
+---@field peds {dict: string, anim: string, entity: integer?, model: integer|string?, blend_in: number?, blend_out: number?, scene_flags: integer?, ragdoll_flags: integer?, move_delta: number?, ik_flags: integer?}[]?
+---@field objs {dict: string, anim: string, entity: integer?, model: integer|string?, door: boolean?, blend_in: number?, blend_out: number?, scene_flags: integer?}?
+```
+
+```lua
+---@param scene_options scene_options
+---@return netscene
+function netscene.new(scene_options)
+
+function netscene:stop()
+
+---@param cb fun(phase: number, ...: unknown): boolean
+---@param ... unknown Arguments to parse to the callback function.
+function netscene:start(cb, ...)
+
+---@param peds boolean?
+---@param objs boolean?
+function netscene:clear(peds, objs)
+
+---@return number
+function netscene:getphase()
 ```
 
 #### stream
