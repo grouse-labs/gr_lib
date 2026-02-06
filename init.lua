@@ -126,6 +126,7 @@ function IsResourceValid(resource_name)
 end
 
 if CONTEXT == 'server' then
+  SetConvarReplicated('locale', GetConvar('locale', 'en'))
 
   ---@param src integer|string? The source to check.
   ---@return boolean? valid
