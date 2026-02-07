@@ -4,6 +4,7 @@ return {
 		['ox_lib'] = "3.30.6"
 	},
 	['notify'] = {
+		['qbx_core'] = "1.23.0",
 		['es_extended'] = "1.13.4",
 		['qb-core'] = "1.3.0"
 	},
