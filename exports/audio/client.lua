@@ -80,7 +80,7 @@ end
 ---@param loops integer
 ---@return integer id
 function audio.playsound(create_id, bank, sound_name, ref, networked, in_replay, loops)
-  if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
+  if bank and bank ~= '' and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
   PlaySoundFrontend(id, sound_name, ref or '0', in_replay or false)
   ReleaseNamedScriptAudioBank(bank)
@@ -104,7 +104,7 @@ end
 ---@param loops integer
 ---@return integer id
 function audio.playsoundfromentity(create_id, bank, sound_name, entity, ref, networked, in_replay, loops)
-  if not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
+  if bank and bank ~= '' and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
   PlaySoundFromEntity(id, sound_name, entity, ref or '0', networked, in_replay or false)
   ReleaseNamedScriptAudioBank(bank)
@@ -131,7 +131,7 @@ end
 ---@param loops integer
 ---@return integer id
 function audio.playsoundatcoords(create_id, bank, sound_name, pos, ref, range, networked, in_replay, loops)
-  if bank and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
+  if bank and bank ~= '' and not glib.stream.audio(bank, networked) then error('failed to load audio bank: ' ..bank) end
   local id = create_id and audio.getsoundid(create_id) or -1
   PlaySoundFromCoord(id, sound_name, pos.x, pos.y, pos.z, ref or '0', networked, range, in_replay or false)
   if bank then ReleaseNamedScriptAudioBank(bank) end
