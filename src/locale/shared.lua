@@ -73,10 +73,18 @@ end
 ---@param string string The string to assert.
 ---@param variables table The variables to assert.
 ---@return string interpolated_string, integer count The string with interpolated fields and the count of fields.
-local function interpolate_field(string, variables)
+local function interpolate_value(string, variables)
   return string:gsub('(.?)%%{%s*(.-)%s*}', function(previous, key)
     if previous == '%' then return end
     return previous..tostring(variables[key])
+  end)
+end
+
+local function interpolate_field(string, variables)
+return string:gsub('(.?)%%<%s*(.-)%s*>%.([-%+#0 %d.]*)([cdEefgGiouXxsq])',
+  function(previous, key, modifiers, format)
+    if previous == '%' then return end
+    return previous..string.format('%'..modifiers..format, variables[key] or 'nil')
   end)
 end
 
@@ -104,6 +112,7 @@ end
 local function interpolate(pattern, variables)
   variables = variables or {}
   local result = pattern
+  result = interpolate_value(result, variables)
   result = interpolate_field(result, variables)
   result = escape_percentages(result)
   result = result:format(unpack(variables))
