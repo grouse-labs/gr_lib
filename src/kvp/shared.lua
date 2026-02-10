@@ -1,6 +1,6 @@
 local kvp = {}
-local setters = {string = SetResourceKvp, number = SetResourceKvpInt, float = SetResourceKvpFloat}
-local getters = {GetResourceKvpString, GetResourceKvpInt, GetResourceKvpFloat}
+local set = SetResourceKvp
+local get = GetResourceKvpString
 
 ---@param handle integer
 ---@return string[] keys
@@ -23,22 +23,20 @@ end
 function kvp.find(prefix) return kvp._find(StartFindKvp(prefix or '')) end
 
 ---@param key string
----@param value string|number
+---@param value string
 ---@return true? success
 function kvp.set(key, value)
-  local _type = type(value)
-  return setters[_type] and setters[_type](key, value)
+  if type(value) ~= 'string' then value = tostring(value) end
+  return set(key, value)
 end
 
 ---@param key string
 ---@return string|number? value
 function kvp.get(key)
-  local value
-  for i = 1, #getters do
-    value = getters[i](key)
-    if value then break end
-  end
-  return value
+  local value = get(key)
+  if not value then return nil end
+  local num = tonumber(value)
+  return num or value
 end
 
 ---@param key string
