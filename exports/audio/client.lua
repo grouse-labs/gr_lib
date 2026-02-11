@@ -163,7 +163,7 @@ function audio.stopsound(id)
   id = id or audio.getsoundid()
   if not id or id < 0 then return end
   StopSound(id)
-  audio.awaitsound(id, audio.releasesoundid)
+  SetTimeout(0, function() audio.awaitsound(id, audio.releasesoundid) end)
 end
 
 ---@param variable string
