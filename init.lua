@@ -125,6 +125,16 @@ function IsResourceValid(resource_name)
   return resource_states:search(state) and resource_states:search(state) ~= 'invalid'
 end
 
+---@param resource string resource name
+---@param name string export name
+---@param func function
+function CatchExport(resource, name, func)
+  ---@param cb function
+  AddEventHandler(('__cfx_export_%s_%s'):format(resource, name), function(cb)
+    cb(func)
+  end)
+end
+
 if CONTEXT == 'server' then
   SetConvarReplicated('locale', GetConvar('locale', 'en'))
 
