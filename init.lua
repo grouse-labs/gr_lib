@@ -22,17 +22,17 @@ local CONTEXT <const> = IsDuplicityVersion() and 'server' or 'client'
 ---@param module string
 ---@return function?
 local function import(glib, module)
-  local dir = 'src/'..module..'/'
-  local file = load_resource_file(GLIB, dir..CONTEXT..'.lua')
-  local shared = load_resource_file(GLIB, dir..'shared.lua')
+  local dir = ('src/%s/'):format(module)
+  local file = load_resource_file(GLIB, ('%s%s.lua'):format(dir, CONTEXT))
+  local shared = load_resource_file(GLIB, ('%sshared.lua'):format(dir))
 
-  file = shared and file and string.format('%s\n%s', shared, file) or shared or file
+  file = shared and file and ('%s\n%s'):format(shared, file) or shared or file
 
   if not file then return end
   local result, err = load(file, '@@'..GLIB..'/'..dir..CONTEXT, 't', _ENV)
-  if not result or err then return error('error occured loading module \''..module..'\''..(err and '\n\t'..err or ''), 3) end
+  if not result or err then return error(('error occured loading module \'%s\'%s'):format(module, err and '\n\t'..err or ''), 3) end
   glib[module] = result()
-  if debug_mode then print('^3[glib]^7 - ^2loaded `glib` module^7 ^5\''..module..'\'^7') end
+  if debug_mode then print(('^3[glib]^7 - ^2loaded `glib` module^7 ^5\'%s\'^7'):format(module)) end
   return glib[module]
 end
 
@@ -85,7 +85,7 @@ local glib = setmetatable({
   _RESOURCE = RES_NAME,
   _CONTEXT = CONTEXT,
   print = function(...)
-    local msg = '^3['..RES_NAME..']^7 - '..(...)
+    local msg = ('^3[%s]^7 - '):format(RES_NAME)..(...)
     if debug_mode then
       print(msg)
     end
@@ -97,10 +97,10 @@ local glib = setmetatable({
   __tostring = function(t)
     local address = string.format('%s: %p', GLIB, t)
     if debug_mode then
-      local msg = string.format('^3[%s]^7 - ^2library^7 ^5\'%s\'^7 v^5%s^7\n%s', RES_NAME, GLIB, VERSION, address)
+      local msg = ('^3[%s]^7 - ^2library^7 ^5\'%s\'^7 v^5%s^7\n%s'):format(RES_NAME, GLIB, VERSION, address)
       for k, v in pairs(t) do
         if type(v) == 'table' then
-          msg = msg..string.format('\n^3[%s]^7 - ^2`glib` module^7 ^5\'%s\'^7 ^2is loaded^7\n%s: %p', RES_NAME, k, k, v)
+          msg = msg..('\n^3[%s]^7 - ^2`glib` module^7 ^5\'%s\'^7 ^2is loaded^7\n%s: %p'):format(RES_NAME, k, k, v)
         end
       end
     return msg
